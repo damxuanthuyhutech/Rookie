@@ -1,13 +1,18 @@
+
 namespace CustomersSite
 {
     public class Program
     {
+        public static string strings { get; set; } = "test";
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
             // Add services to the container.
             builder.Services.AddRazorPages();
+            builder.Services.AddDistributedMemoryCache();
+            //builder.Services.AddDbContext<RookiesDbContext>(options => {
+            //    options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
+            //});
 
             var app = builder.Build();
 

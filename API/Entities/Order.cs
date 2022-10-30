@@ -6,7 +6,8 @@ namespace API.Entities
 {
     public class Order
     {
-
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public DateTime CreateAt { get; set; }
         public double Discount { get; set; }

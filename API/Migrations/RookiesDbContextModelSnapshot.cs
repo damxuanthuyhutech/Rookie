@@ -204,11 +204,11 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.OrderItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"), 1L, 1);
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -216,7 +216,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int>("OrderId1")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")
@@ -234,9 +234,9 @@ namespace API.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.HasKey("OrderId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId1");
 
                     b.HasIndex("ProductId");
 
@@ -258,6 +258,9 @@ namespace API.Migrations
 
                     b.Property<double>("AverageRating")
                         .HasColumnType("float");
+
+                    b.Property<int?>("CategoryIdId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -297,6 +300,8 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryIdId");
+
                     b.ToTable("products");
                 });
 
@@ -314,7 +319,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreteDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderItemId")
+                    b.Property<int>("OrderItemOrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("Stars")
@@ -325,7 +330,7 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderItemId");
+                    b.HasIndex("OrderItemOrderId");
 
                     b.HasIndex("UserId");
 
@@ -417,7 +422,7 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Entities.Order", "Order")
                         .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("OrderId1")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -440,11 +445,21 @@ namespace API.Migrations
                     b.Navigation("Size");
                 });
 
+            modelBuilder.Entity("API.Entities.Product", b =>
+                {
+                    b.HasOne("API.Entities.Category", "CategoryId")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryIdId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CategoryId");
+                });
+
             modelBuilder.Entity("API.Entities.Rating", b =>
                 {
                     b.HasOne("API.Entities.OrderItem", "OrderItem")
                         .WithMany("Ratings")
-                        .HasForeignKey("OrderItemId")
+                        .HasForeignKey("OrderItemOrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -466,6 +481,11 @@ namespace API.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Ratings");
+                });
+
+            modelBuilder.Entity("API.Entities.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("API.Entities.Order", b =>

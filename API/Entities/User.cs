@@ -1,10 +1,14 @@
 ﻿using API.Entities;
 using ShareModel.Enum;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Data
 {
     public class User
     {
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int Active { get; set; }
         public string? AvatarImage { get; set; }

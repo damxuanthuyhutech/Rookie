@@ -2,8 +2,10 @@
 using API.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShareModel.DTO;
+using ShareModel.DTO.Product;
 
 namespace API.Controllers
 {
@@ -12,6 +14,11 @@ namespace API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly RookiesDbContext _context;
+
+
+        public IList<Product> Products { get; set; } = default!;
+       
+
 
         public ProductController(RookiesDbContext context)
         {
@@ -26,11 +33,35 @@ namespace API.Controllers
             return Ok(pro);
         }
 
+        [HttpGet]
+        [Route("get-all-products")]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAllProducts()
+        {
+            return await _context.products!
+                            .Include(x => x.Category)
+                            .Take(9)
+                            .Select(x => new ProductDTO()
+                            {
+                                Price = x.Price,
+                                Content = x.Content,
+                                Category = x.Category.Title ?? "", // Use ID not use name or title ?
+                                Desciption = x.Desciption,
+                                Detail = x.Detail,
+                                Discount = x.Discount,
+                                Id = x.Id,
+                                NumberSold = x.NumberSold ,
+                                Title = x.Title ?? ""
+                            })
+                            .ToListAsync();
+        }
+
+
+
         [HttpGet("{id}")]
         public IActionResult getById(int id)
         {
 
-            var loai = _context.products.SingleOrDefault(l => l.Id == id);
+            var loai = _context.products.FirstOrDefault(l => l.Id == id);
             if (loai != null)
             {
                 return Ok(loai);
@@ -47,7 +78,7 @@ namespace API.Controllers
 
         [HttpPost]
         //[Authorize]
-        public IActionResult CreateNew(Product productDTO)
+        public IActionResult CreateNew(ProductCreateDto productDTO)
         {
             try
             {
@@ -67,8 +98,9 @@ namespace API.Controllers
                    Content = productDTO.Content,
                    Detail = productDTO.Detail,
                    Active = productDTO.Active,
+                   
                 };
-                _context.Add(product);
+                _context.products.Add(product);
                 _context.SaveChanges();
                 return Ok(product);
             }

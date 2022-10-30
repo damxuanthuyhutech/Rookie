@@ -1,9 +1,13 @@
 ﻿using API.Data;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.Entities
 {
     public class CartItem
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public int Active { get; set; }
         public DateTime CreateAt { get; set; }
