@@ -30,11 +30,11 @@ namespace CustomersSite.Pages
             var response1 = await client.GetAsync("api/Category");
             var result1 = response1.Content.ReadAsStringAsync().Result;
             Categories = JsonConvert.DeserializeObject<List<CategoryDTO>>(result1);
-            
+
             if (!string.IsNullOrEmpty(SearchString))
             {
                 {
-                    Products = Products!.Where(s => s.Title.ToLower().Contains(SearchString.ToLower())).ToList();
+                    Products = Products!.Where(s => s.Name.ToLower().Contains(SearchString.ToLower())).ToList();
                 }
 
             }
@@ -45,17 +45,14 @@ namespace CustomersSite.Pages
                 //Products = Products!.Where(s => s.ProductId == SelectedCategory).ToList();
                 Products = Products!.Where(x => x.Category == SelectedCategory).ToList(); // ID have index query
             }
-            else
-            {
-                Console.WriteLine("null");
-            }
-            //Products = Products.Take(9).ToList();
-            OptionCategories = new SelectList(Categories?.Select(x => x.Title));
+            
+
+            OptionCategories = new SelectList(Categories?.Select(x => x.Name));
 
 
 
-         
-            }
+
         }
-    
+    }
+
 }

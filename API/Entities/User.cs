@@ -1,34 +1,14 @@
-﻿using API.Entities;
-using ShareModel.Enum;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace API.Data
+namespace API.Entities;
+public class User
 {
-    public class User
-    {
-        //[Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public int Active { get; set; }
-        public string? AvatarImage { get; set; }
-        public string? Email { get; set; }
-        public string? Firt_Name { get; set; }
-        public string? Last_Name { get; set; }
-        public string? Phone { get; set; }
-        public string? PasswordHash { get; set; }
-        public string? Profile { get; set; }
-        public DateTime RegisteredDate { get; set; }
-        public string? UserName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public Sex Sex { get; set; }
-        public string? Address { get; set; }
+    public int Id { get; set; }
+    public UserRole Role { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public byte[] PasswordSalt { get; set; } = new byte[] { };
+    public string Address { get; set; } = string.Empty;
+    public ICollection<Rating>? Ratings { get; set; }
 
-
-        public List<Order> Order { get; set; } = null!;
-        public List<Rating> Ratings { get; set; } = null!;
-        public List<CartItem> CartItem { get; set; } = null!;
-
-
-    }
 }

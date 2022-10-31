@@ -4,7 +4,7 @@
 
 namespace API.Migrations
 {
-    public partial class init15 : Migration
+    public partial class updateDatabase1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -34,7 +34,7 @@
                     </div>
 
                     <div class="col-lg-7 pb-5">
-                        <h3 class="font-weight-semi-bold">@Model.Products.Title</h3>
+                        <h3 class="font-weight-semi-bold">@Model.Products.Name</h3>
                         <div class="d-flex mb-3">
                             <div class="text-primary mr-2">
                                 <small class="fas fa-star"></small>
@@ -46,7 +46,7 @@
                             <small class="pt-1">(50 Reviews)</small>
                         </div>
                         <h3 class="font-weight-semi-bold mb-4">@Model.Products.Price</h3>
-                        <p class="mb-4">@Model.Products.Content</p>
+                        <p class="mb-4">@Model.Products.Description</p>
                         <div class="d-flex mb-3">
                             <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
                             <form>
@@ -142,7 +142,7 @@
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="tab-pane-1">
                                 <h4 class="mb-3">Product Description</h4>
-                                <p>@Model.Products.Desciption</p>
+                                <p>@Model.Products.Author</p>
                             </div>
                             <div class="tab-pane fade" id="tab-pane-2">
                                 <h4 class="mb-3">Additional Information</h4>

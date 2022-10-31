@@ -24,8 +24,8 @@ namespace CustomersSite.Pages
             ProductsNew = ProductsNew!.OrderByDescending(a => a.UpdatedDate).Take(6).ToList();
 
             ProductsHot = product;
-            ProductsHot = ProductsHot!.OrderByDescending(a => a.AverageRating).Take(8).ToList();
-           
+            ProductsHot = ProductsHot!.OrderByDescending(a => a.CreatedDate).Take(8).ToList();
+
 
 
 

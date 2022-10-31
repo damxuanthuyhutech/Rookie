@@ -168,7 +168,7 @@
                             <form action="">
                                 <div class="input-group">
                                      <select asp-for="SelectedCategory" asp-items="Model.OptionCategories">
-                                     <option value="">All</option>
+                                        <option value=""><a asp-page="ShowProduct1">All</a></option>
                                       </select> 
                                     <input type="text" class="form-control" asp-for="SearchString" placeholder="Search by name">
                                     <div class="input-group-append">
@@ -193,7 +193,7 @@
                         </div>
                     </div>
                     
-                        
+                       
                 @{
                     int count = 0;
                     foreach (var product in Model.Products)
@@ -211,10 +211,10 @@
                                                             <a asp-page="showdetail"><img class="img-fluid w-100" src="img/product-1.jpg" alt=""></a>
                                                 </div>
                                                 <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
-                                                            <h6 class="text-truncate mb-3">  @product.Title</h6>
+                                                            <h6 class="text-truncate mb-3"> @product.Name</h6>
                                                     <div class="d-flex justify-content-center">
-                                                                <h6>$@Html.DisplayFor(modelItem => product.Price)</h6>
-                                                                <h6 class="text-muted ml-2"><del>$@Html.DisplayFor(modelItem => product.Discount)</del></h6>
+                                                                <h6>$@product.Price</h6>
+                                                                <h6 class="text-muted ml-2"><del>$Discount300</del></h6>
                                                     </div>
                                                 </div>
                                                 <div class="card-footer d-flex justify-content-between bg-light border">
