@@ -11,6 +11,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class ProductController : ControllerBase
     {
         private readonly RookiesDbContext _context;
@@ -39,6 +40,7 @@ namespace API.Controllers
         {
             return await _context.Products!
                             .Include(x => x.Category)
+                            .Include(x => x.Ratings)
                             .Take(9)
                             .Select(x => new ProductDTO()
                             {
@@ -62,22 +64,22 @@ namespace API.Controllers
 
 
 
-        [HttpGet("{id}")]
-        public IActionResult getById(int id)
-        {
+        //[HttpGet("{id}")]
+        //public IActionResult getById(int id)
+        //{
 
-            var loai = _context.Products.FirstOrDefault(l => l.Id == id);
-            if (loai != null)
-            {
-                return Ok(loai);
-            }
-            else
-            {
-                return NotFound();
-            }
+        //    var loai = _context.Products.FirstOrDefault(l => l.Id == id);
+        //    if (loai != null)
+        //    {
+        //        return Ok(loai);
+        //    }
+        //    else
+        //    {
+        //        return NotFound();
+        //    }
 
 
-        }
+        //}
 
 
 
@@ -148,9 +150,9 @@ namespace API.Controllers
         //    }
 
 
-    //}
+        //}
 
-    [HttpDelete("{id}")]
+        [HttpDelete("{id}")]
     public IActionResult Delete(int Id)
     {
         var pro = _context.Products.SingleOrDefault(l => l.Id == Id);
@@ -167,5 +169,52 @@ namespace API.Controllers
             return NotFound();
         }
     }
-}
+        //-------------------------------------------------------
+
+        [HttpGet("{id}")] 
+        //[HttpGet("[action]/{id}")]
+        public async Task<ActionResult<ProductDTO>> GetProductById(int id)
+        {
+            var product = await _context.Products!
+                                    .Include(x => x.Category)
+                                    .Include(x => x.Ratings)                                    
+                                    .FirstOrDefaultAsync(product => product.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return ProductDTO(product);
+        }
+
+        //[HttpPost("[action]")]
+        //public async Task<ActionResult<Product>> CreateProduct(Product product)
+        //{
+        //    _context.Products!.Add(product);
+        //    await _context.SaveChangesAsync();
+
+        //    return Ok();
+        //}
+        private static ProductDTO ProductDTO(Product product)
+        {
+            var numberOfRating = product.Ratings.Count;
+            var avgRating = numberOfRating > 0 ? Convert.ToDecimal(product.Ratings.Aggregate(0, (sum, rating) => sum + rating.Star)) / numberOfRating : 0;
+            return new ProductDTO
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Image = product.Image,
+                Author = product.Author,
+                Price = product.Price,
+                Quantity = product.Quantity,
+                CreatedDate = product.CreatedDate,
+                UpdatedDate = product.UpdatedDate,
+                Category = product.Category!.Name,
+                AverageRating = avgRating
+            };
+        }
+
+    }   
 }
