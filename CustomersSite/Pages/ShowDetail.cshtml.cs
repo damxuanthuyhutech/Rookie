@@ -16,7 +16,7 @@ namespace CustomersSite.Pages
         [BindProperty]
         public ReviewProductFormDTO ReviewForm { get; set; } = default!;
         public List<RatingDTO> RatingList { get; set; } = new List<RatingDTO>();
-        public int AverageStar { get; set; } = default!;
+        
 
         public async Task OnGetAsync(int? id)
         {
@@ -35,19 +35,7 @@ namespace CustomersSite.Pages
             result = response.Content.ReadAsStringAsync().Result;
             RatingList = JsonConvert.DeserializeObject<List<RatingDTO>>(result) ?? new List<RatingDTO>();
 
-            int s = 0;
-
-           
-            //foreach (var rating in RatingList.)
-            //{
-            //    if(rating.Star == null)
-            //    {
-            //        s = 0;
-            //        break;
-            //    }
-            //    s = rating.Star++;
-            //}
-            //AverageStar = (int)(s / RatingList.Count);
+    
 
         }
 
