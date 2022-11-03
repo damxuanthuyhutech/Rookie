@@ -1,192 +1,301 @@
 ﻿@page 
-@model CustomerSite.Pages.DetailsModel
+@model CustomersSite.Pages.ShowDetailModel
 
-@{
-    ViewData["Title"] = "Details";
-}
 
-<div style="background: url('https://localhost:5001/images/Product/slider-bg.png') repeat; height: 300px;">
-    <div class="container">
-        <div>
-            <img src="~/images/Product/inner-banner.png" alt="">
-        </div>
-    </div>
-</div>
 
-<div class="container" style="margin-top: 100px; margin-bottom: 150px;">
-    <div class="card border-0 mb-5">
-        <div class="row g-0">
-            <div class="col-md-4 text-center">
-                <img src="~/images/@Model.Product.Image" class="img-fluid rounded-start" alt="..."
-                    style="width: 242px; height: 341px;">
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title" style="font-weight: 700;">@Model.Product.Name</h5>
-                    <p class="card-text">@Model.Product.Description</p>
-                    <p class="card-text"><strong>Author:</strong> @Model.Product.Author</p>
-                    <p class="card-text">Category: @Model.Product.Category</p>
-                    <p class="text-danger" style="font-size: 20px; font-weight: 500;">
-                        $@Model.Product.Price
-                    </p>
-                    <div class="mb-3">
-                        @for (int i = 0; i < Math.Floor(@Model.Product.AverageRating); i++)
+
+    <div class="container-fluid py-5">
+                                        <div class="row px-xl-5">
+                                            <div class="col-lg-5 pb-5">
+                                                <div id="product-carousel" class="carousel slide" data-ride="carousel">
+                                                    <div class="carousel-inner border">
+                                                        <div class="carousel-item active">
+                                                            <img class="w-100 h-100" src="img/product-1.jpg" alt="Image">
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <img class="w-100 h-100" src="img/product-2.jpg" alt="Image">
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <img class="w-100 h-100" src="img/product-3.jpg" alt="Image">
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <img class="w-100 h-100" src="img/product-4.jpg" alt="Image">
+                                                        </div>
+                                                    </div>
+                                                    <a class="carousel-control-prev" href="#product-carousel" data-slide="prev">
+                                                        <i class="fa fa-2x fa-angle-left text-dark"></i>
+                                                    </a>
+                                                    <a class="carousel-control-next" href="#product-carousel" data-slide="next">
+                                                        <i class="fa fa-2x fa-angle-right text-dark"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-7 pb-5">
+                                                <h3 class="font-weight-semi-bold">@Model.Products.Name</h3>
+                                                <div class="d-flex mb-3">
+                                                    <div class="text-primary mr-2">
+                    @{
+                        int s = 0;
+                        int Average = 0;
+                        foreach (var star in Model.RatingList)
                         {
-                            <i class="bi bi-star-fill" style="color: #ffc700;"></i>
+                            s = star.Star + s;
                         }
-                        @if (Math.Round(@Model.Product.AverageRating * 2) % 2 == 1)
+                        if (Model.RatingList.Count == 0)
                         {
-                            <i class="bi bi-star-half" style="color: #ffc700;"></i>
-                        }
-                        @for (int i = 0; i < Math.Floor((10 - Math.Round(@Model.Product.AverageRating * 2)) / 2); i++)
-                        {
-                            <i class="bi bi-star"></i>
-                        }
-                    </div>
-                    <a class="btn btn-success" asp-page="../Order/Index" asp-page-handler="AddToCart"
-                        asp-route-id="@Model.Product.Id">Add To Cart</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="card border-0" style="margin-top: 100px; margin-bottom: 100px;">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <h1 class="text-center"
-                    style="font-weight: 750; font-size: 90px; transform: translateY(50px) rotate(-90deg);">Info</h1>
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <p class="card-text"><strong>Format:</strong> @Model.Product.UpdatedDate</p>
-                    <p class="card-text"><strong>Status:</strong>
-                        @if (Model.Product.Quantity > 0)
-                        {
-                            <span> Available</span>
+                                        <small>Product no Reviews</small>
                         }
                         else
                         {
-                            <span> Out of Stock</span>
+                            for (int i = 0; i < s / (Model.RatingList.Count); i++)
+                            {
+                                                                        <small class="fas fa-star">fgdfgdfg</small>
+                            }
                         }
-                    </p>
-                    <p class="card-text"><strong>Quantity:</strong> @Model.Product.Quantity</p>
-                    <p class="card-text"><strong>Description:</strong> @Model.Product.Description
-                    </p>
-                </div>
-            </div>
-        </div>
+
+
+                    }
+
+
+
+
+
+
+
+
+
+
+                                                    </div>
+                                                    <small class="pt-1">(@Model.RatingList.Count Reviews)</small>
+                                                </div>
+                                                <h3 class="font-weight-semi-bold mb-4">@Model.Products.Price</h3>
+                                                <p class="mb-4">@Model.Products.Description</p>
+                                                <div class="d-flex mb-3">
+                                                    <p class="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
+                                                    <form>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" class="custom-control-input" id="size-1" name="size">
+                                                            <label class="custom-control-label" for="size-1">XS</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" class="custom-control-input" id="size-2" name="size">
+                                                            <label class="custom-control-label" for="size-2">S</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" class="custom-control-input" id="size-3" name="size">
+                                                            <label class="custom-control-label" for="size-3">M</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" class="custom-control-input" id="size-4" name="size">
+                                                            <label class="custom-control-label" for="size-4">L</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" class="custom-control-input" id="size-5" name="size">
+                                                            <label class="custom-control-label" for="size-5">XL</label>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="d-flex mb-4">
+                                                    <p class="text-dark font-weight-medium mb-0 mr-3">Colors:</p>
+                                                    <form>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" class="custom-control-input" id="color-1" name="color">
+                                                            <label class="custom-control-label" for="color-1">Black</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" class="custom-control-input" id="color-2" name="color">
+                                                            <label class="custom-control-label" for="color-2">White</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" class="custom-control-input" id="color-3" name="color">
+                                                            <label class="custom-control-label" for="color-3">Red</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" class="custom-control-input" id="color-4" name="color">
+                                                            <label class="custom-control-label" for="color-4">Blue</label>
+                                                        </div>
+                                                        <div class="custom-control custom-radio custom-control-inline">
+                                                            <input type="radio" class="custom-control-input" id="color-5" name="color">
+                                                            <label class="custom-control-label" for="color-5">Green</label>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-4 pt-2">
+                                                    <div class="input-group quantity mr-3" style="width: 130px;">
+                                                        <div class="input-group-btn">
+                                                            <button class="btn btn-primary btn-minus" >
+                                                            <i class="fa fa-minus"></i>
+                                                            </button>
+                                                        </div>
+                                                        <input type="text" class="form-control bg-secondary text-center" value="1">
+                                                        <div class="input-group-btn">
+                                                            <button class="btn btn-primary btn-plus">
+                                                                <i class="fa fa-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                                                </div>
+                                                <div class="d-flex pt-2">
+                                                    <p class="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
+                                                    <div class="d-inline-flex">
+                                                        <a class="text-dark px-2" href="">
+                                                            <i class="fab fa-facebook-f"></i>
+                                                        </a>
+                                                        <a class="text-dark px-2" href="">
+                                                            <i class="fab fa-twitter"></i>
+                                                        </a>
+                                                        <a class="text-dark px-2" href="">
+                                                            <i class="fab fa-linkedin-in"></i>
+                                                        </a>
+                                                        <a class="text-dark px-2" href="">
+                                                            <i class="fab fa-pinterest"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row px-xl-5">
+                                            <div class="col">
+                                                <div class="nav nav-tabs justify-content-center border-secondary mb-4">
+                                                    <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
+                                                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Information</a>
+                                                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Reviews (@Model.RatingList.Count)</a>
+                                                </div>
+                                                <div class="tab-content">
+                                                    <div class="tab-pane fade show active" id="tab-pane-1">
+                                                        <h4 class="mb-3">Product Description</h4>
+                                                        <p>@Model.Products.Author</p>
+                                                    </div>
+                                                    <div class="tab-pane fade" id="tab-pane-2">
+                                                        <h4 class="mb-3">Additional Information</h4>
+                                                        <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut diam consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea invidunt.</p>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <ul class="list-group list-group-flush">
+                                                                    <li class="list-group-item px-0">
+                                                                        Sit erat duo lorem duo ea consetetur, et eirmod takimata.
+                                                                    </li>
+                                                                    <li class="list-group-item px-0">
+                                                                        Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
+                                                                    </li>
+                                                                    <li class="list-group-item px-0">
+                                                                        Duo amet accusam eirmod nonumy stet et et stet eirmod.
+                                                                    </li>
+                                                                    <li class="list-group-item px-0">
+                                                                        Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
+                                                                    </li>
+                                                                  </ul> 
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <ul class="list-group list-group-flush">
+                                                                    <li class="list-group-item px-0">
+                                                                        Sit erat duo lorem duo ea consetetur, et eirmod takimata.
+                                                                    </li>
+                                                                    <li class="list-group-item px-0">
+                                                                        Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
+                                                                    </li>
+                                                                    <li class="list-group-item px-0">
+                                                                        Duo amet accusam eirmod nonumy stet et et stet eirmod.
+                                                                    </li>
+                                                                    <li class="list-group-item px-0">
+                                                                        Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
+                                                                    </li>
+                                                                  </ul> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane fade" id="tab-pane-3">
+
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                    <h4 class="mb-4">@Model.RatingList.Count review for "@Model.Products.Name"</h4>
+
+
+
+                            @foreach (var rankting in Model.RatingList)
+                            {
+                                                                                <div class="media mb-4">
+                                                                                    <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                                                                    <div class="media-body">   
+                                                                                    <h6>@rankting.Title<small> - <i>@rankting.UpdatedDate</i></small></h6>
+                                                                                    <div class="text-primary mb-2">
+                                            @for (int i = 0; i < @rankting.Star; i++)
+                                            {
+                                                                                             <i class="fas fa-star"></i>
+                                            }
+                                                                                    </div>
+                                                                                         <p>@rankting.Comment</p>
+                                                                                    </div>
+                                                                                </div>
+                            }
+
+
+
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <h4 class="mb-4">Leave a review</h4>                                            
+                                                                <div class="d-flex my-3">
+
+                                                                    <p class="mb-0 mr-2">Your Rating * :</p>
+                                                                        <form method="post" style="font-size: 20px; margin-bottom: 100px;">
+                                                                            <div class="d-flex justify-content-center">
+                                                                                <div class="rate">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                                                                    <input type="radio" id="@i" name="Stars" value="@i" />
+
+                                                                                            <label for="@i" title="text"></label>
+                                            }
+                                                                                </div>
+                                                                            </div>
+                                                                            <p class="text-center">Click a star to rate</p>
+                                                                            <div class="input-group mb-3">
+                                                                                <span class="input-group-text" id="inputGroup-sizing-default">User Name</span>
+                                                                                <input asp-for="@Model.ReviewForm.Title" type="text" class="form-control" aria-label="Sizing example input"
+                                                                aria-describedby="inputGroup-sizing-default">
+                                                                            </div>
+                                                                            <div class="form-floating mb-3">
+                                                                                <textarea asp-for="@Model.ReviewForm.Comment" class="form-control" placeholder="Leave a comment here"
+                                                                id="floatingTextarea2" style="height: 100px"></textarea>
+
+                                                                            </div>
+                                                                            <div class="d-flex justify-content-end">
+                                                                                <button class="btn btn-success">Submit</button>
+                                                                            </div>
+                                                                        </form>
+
+
+
+
+                                                                    <div class="text-primary">
+
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                                    <!-- cmt -->
+
+
+                                                                    <!-- Shop Detail End -->
+
+
+
+
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
     </div>
+    <!-- Shop Detail End -->
 
-    <hr>
 
-    <h1 class="text-center text-danger" style="margin-top: 80px;">Write a Review</h1>
-    <form method="post" style="font-size: 20px; margin-bottom: 100px;">
-        <div class="d-flex justify-content-center">
-            <div class="rate">
-                @for (int i = 5; i > 0; i--)
-                {
-                    <input type="radio" id="@i" name="Stars" value="@i" />
-                    <label for="@i" title="text"></label>
-                }
-            </div>
-        </div>
-        <p class="text-center">Click a star to rate</p>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="inputGroup-sizing-default">Title</span>
-            <input asp-for="@Model.ReviewForm.Title" type="text" class="form-control" aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default">
-        </div>
-        <div class="form-floating mb-3">
-            <textarea asp-for="@Model.ReviewForm.Comment" class="form-control" placeholder="Leave a comment here"
-                id="floatingTextarea2" style="height: 100px"></textarea>
-            <label for="floatingTextarea2">Comments</label>
-        </div>
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-success">Submit</button>
-        </div>
-    </form>
 
-    <hr>
 
-    <h1 style="margin-top: 50px;">Rating List</h1>
-
-    @if (@Model.RatingList.Count == 0)
-    {
-        <div>
-            No Comment Yet.
-        </div>
-    }
-    @foreach (var rating in @Model.RatingList)
-    {
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class='d-flex justify-content-between'>
-                    <h5 class="card-title">@rating.Title</h5>
-                    <p class="text-secondary">Created Date</p>
-                </div>
-                <div class='d-flex justify-content-between'>
-                    <span>
-                        @for (int i = 0; i < rating.Star; i++)
-                        {
-                            <i class="bi bi-star-fill" style="color: #ffc700;"></i>
-                        }
-                        @for (int i = 0; i < 5 - rating.Star; i++)
-                        {
-                            <i class="bi bi-star"></i>
-                        }
-
-                    </span>
-                    <p><span class="text-secondary">Written by </span>@rating.Reviewer</p>
-                </div>
-                <p class="card-text">@rating.Comment</p>
-            </div>
-        </div>
-    }
-
-</div>
-
-<style>
-    .rate {
-        float: left;
-        height: 46px;
-        padding: 0 10px;
-    }
-
-    .rate:not(:checked)>input {
-        position: absolute;
-        top: -9999px;
-    }
-
-    .rate:not(:checked)>label {
-        float: right;
-        width: 1em;
-        overflow: hidden;
-        white-space: nowrap;
-        cursor: pointer;
-        font-size: 30px;
-        color: #ccc;
-    }
-
-    .rate:not(:checked)>label:before {
-        content: '★ ';
-    }
-
-    .rate>input:checked~label {
-        color: #ffc700;
-    }
-
-    .rate:not(:checked)>label:hover,
-    .rate:not(:checked)>label:hover~label {
-        color: #deb217;
-    }
-
-    .rate>input:checked+label:hover,
-    .rate>input:checked+label:hover~label,
-    .rate>input:checked~label:hover,
-    .rate>input:checked~label:hover~label,
-    .rate>label:hover~input:checked~label {
-        color: #c59b08;
-    }
-</style>
+ <!-- Shop Detail Start -->

@@ -44,8 +44,8 @@ namespace CustomersSite.Pages
             var client = new HttpClient();
             client.BaseAddress = new Uri("https://localhost:7182/");
             ReviewForm.ProductId = id;
-            //string userId = Request.Cookies["Id"]!;
-            //ReviewForm.UserId = Int32.Parse(userId);
+            string userId = Request.Cookies["Id"]!;
+            ReviewForm.UserId = Int32.Parse(userId);
             ReviewForm.Star = Int32.Parse(Stars);
             await client.PostAsJsonAsync("api/Rating", ReviewForm);
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(RookiesDbContext))]
-    [Migration("20221031060230_updateDatabase")]
-    partial class updateDatabase
+    [Migration("20221102154401_adddatabase")]
+    partial class adddatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

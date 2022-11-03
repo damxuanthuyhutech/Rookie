@@ -1,0 +1,41 @@
+﻿@page
+@model CustomerSite.Pages.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container mb-5">
+    <div class="offset-4 col-4 mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">New Account</h5>
+                <p class="card-text">Not our registered customer yet?</p>
+                <h5 class="mt-3">Register</h5>
+                <hr>
+                <form method="post">
+                    <div class="mb-3">
+                        <input asp-for="@Model.RegisterForm.Username" type="text" class="form-control" placeholder="Username">
+                    </div>
+                    <div class="mb-3">
+                        <input asp-for="@Model.RegisterForm.Password" type="password" class="form-control" placeholder="Password">
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" placeholder="Confirm Password">
+                    </div>
+                    <div class="mb-3">
+                        <input asp-for="@Model.RegisterForm.Email" type="email" class="form-control" placeholder="Email">
+                    </div>
+                    <div class="mb-3">
+                        <input asp-for="@Model.RegisterForm.Name" type="text" class="form-control" placeholder="Name">
+                    </div>
+                    <div class="mb-3">
+                        <input asp-for="@Model.RegisterForm.Address" type="text" class="form-control" placeholder="Address">
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-dark">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

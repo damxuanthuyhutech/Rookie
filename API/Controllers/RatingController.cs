@@ -20,17 +20,33 @@ namespace API.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult getAll()
+        {
+
+            var pro = _context.Ratings.ToList();
+            return Ok(pro);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<RatingDTO>>> GetAllRatings(int id)
         {
 
-            return await _context.Ratings!
+            var result = await _context.Ratings!
                             .Include(x => x.Product)
                             .Include(x => x.User)
                             .Where(x => x.Product.Id == id)
-                            .Select(x => new RatingDTO())
+                            .Select(x => new RatingDTO()
+                            {
+                                Title = x.Title,
+                                Comment = x.Comment,
+                                Star=x.Star,
+                                UpdatedDate=x.UpdatedDate,
+                                Reviewer = x.User.Name
+                                
+                            })
                             .ToListAsync();
-            
+            return result;
         }
 
         //[HttpPost("[action]")]
@@ -38,7 +54,7 @@ namespace API.Controllers
         public async Task<ActionResult<Rating>> ReviewProduct(ReviewProductFormDTO reviewProductForm)
         {
             var product = await _context.Products!.FindAsync(reviewProductForm.ProductId);
-            var user = await _context.Users!.FindAsync(reviewProductForm.UserId = 1);
+            var user = await _context.Users!.FindAsync(reviewProductForm.UserId);
             if (user == null || product == null)
                 return BadRequest();
             var rating = new Rating
@@ -66,6 +82,6 @@ namespace API.Controllers
                 UpdatedDate = rating.UpdatedDate
             };
 
-       
+
     }
 }
