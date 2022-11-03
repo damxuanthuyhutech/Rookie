@@ -44,6 +44,7 @@ namespace CustomersSite.Pages
                 //Products = from s in Products where (s.Category == SelectedCategory;
                 //Products = Products!.Where(s => s.ProductId == SelectedCategory).ToList();
                 Products = Products!.Where(x => x.Category == SelectedCategory).ToList(); // ID have index query
+          
             }
             
 
