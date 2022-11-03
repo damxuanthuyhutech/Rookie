@@ -27,6 +27,12 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 </head>
+
+@{
+    string token = Context.Request.Cookies["access_token"] ?? "";
+    string name = Context.Request.Cookies["name"] ?? "";
+}
+
 <body>
  <!-- Topbar Start -->
     <div class="container-fluid">
@@ -106,8 +112,37 @@
                             <a href="Contact" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0">
+                            
+                            
+                            @if(token != "")
+                            {
+                                 <ul class="navbar-nav d-flex flex-row p-2 align-middle">
+                            <li class="nav-item" style="margin: 0 18px">
+                                <p style="font-weight: 500;" class="m-0">
+                                    Hello <span class="text-danger">@name</span>
+                                </p>
+                            </li>
+                            <li class="nav-item" style="margin: 0 18px;">
+                                <button onclick="logOut()" style="border: 0; background: inherit; font-weight: 500;">
+                                    LOGOUT
+
+                                   
+                                </button>
+                            </li>
+                                </ul>
+                            }
+                            else
+                            {
+
                             <a href="Login" class="nav-item nav-link">Login</a>
-                            <a href="Register" class="nav-item nav-link">Register</a>
+                            <a href="Register" class="nav-item nav-link">Register</a> 
+                            }
+                            
+                            
+                            
+                            
+                            
+                           
                         </div>
                     </div>
                 </nav>
@@ -248,3 +283,16 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<script>
+    function delete_cookie(name) {
+        document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';     
+    }
+    const logOut = () => {
+        delete_cookie("access_token")
+
+        location.reload()
+        return false
+    }
+</script>
+
