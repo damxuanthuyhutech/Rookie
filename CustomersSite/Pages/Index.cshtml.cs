@@ -26,10 +26,12 @@ namespace CustomersSite.Pages
             ProductsHot = product;
             ProductsHot = ProductsHot!.OrderByDescending(a => a.CreatedDate).Take(8).ToList();
 
-
+            
 
 
         }
+
+        
     }
 
 }

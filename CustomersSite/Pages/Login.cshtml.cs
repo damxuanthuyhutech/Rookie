@@ -1,4 +1,5 @@
 using CustomerSite.Helper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -50,5 +51,22 @@ namespace CustomersSite.Pages
             }
             return RedirectToPage("Login");
         }
+
+
+
+        public async Task<IActionResult> Logout()
+        {
+            //await HttpContext.SignOutAsync(
+            //        scheme: "DemoSecurityScheme");
+
+            //return RedirectToAction("Login");
+
+            Response.Cookies.Delete("access_token");
+            Response.Cookies.Delete("Id");
+            Response.Cookies.Delete("name");
+            Response.Cookies.Delete(".AspNetCore.Antiforgery.V5xRoiv8DEY");
+            return RedirectToPage("index");
+        }
+
     }
 }
