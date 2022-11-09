@@ -55,12 +55,7 @@ namespace CustomersSite.Pages
 
 
         public async Task<IActionResult> Logout()
-        {
-            //await HttpContext.SignOutAsync(
-            //        scheme: "DemoSecurityScheme");
-
-            //return RedirectToAction("Login");
-
+        {       
             Response.Cookies.Delete("access_token");
             Response.Cookies.Delete("Id");
             Response.Cookies.Delete("name");

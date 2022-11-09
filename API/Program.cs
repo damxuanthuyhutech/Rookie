@@ -8,7 +8,7 @@ namespace API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -18,12 +18,19 @@ namespace API
 
             //////Cus
             /////1Chap nhan moi dia chi ip (public)
-            builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+            //builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
             builder.Services.AddDbContext<RookiesDbContext>(options => {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DB"));
             });
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:3000");
+                                  });
+            });
 
 
             var app = builder.Build();
@@ -39,9 +46,10 @@ namespace API
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
             app.UseAuthorization();
-
-
+            app.UseRouting();
+            app.UseCors(MyAllowSpecificOrigins);
             app.MapControllers();
 
             app.Run();

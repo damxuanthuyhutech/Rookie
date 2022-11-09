@@ -4,9 +4,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using ShareModel.DTO;
+using ShareModel.DTO.Product;
+using System.Text.Json;
+using System.Web;
 
 namespace CustomersSite.Pages
 {
+    
+
     public class ShowProduct1Model : PageModel
     {
         private APIHelper _api = new APIHelper();
@@ -22,8 +27,28 @@ namespace CustomersSite.Pages
 
         public async Task OnGetAsync()
         {
+            SearchProductDto input = new SearchProductDto();
+            input.Search = SearchString;
+            input.Category = SelectedCategory;
+
             HttpClient client = _api.initial();
             var response = await client.GetAsync("api/Product/get-all-products");
+
+            var url = HttpUtility.ParseQueryString(string.Empty);
+            if (!string.IsNullOrWhiteSpace(input.Search))
+            {
+                url["search"] = input.Search;
+            }
+            if (!string.IsNullOrWhiteSpace(input.Category))
+            {
+                url["category"] = input.Category;
+            }
+            url["page"] = input.Page.Value.ToString();
+            url["maxResponse"] = input.MaxResponse.Value.ToString();
+            url["skip"] = input.Skip.Value.ToString();
+
+            var abc = await client.GetAsync("api/Product/search?" + url.ToString());
+            //var abc = client.GetAsync("api/Product/search?" + url.ToString());
             var result = response.Content.ReadAsStringAsync().Result;
             Products = JsonConvert.DeserializeObject<List<ProductDTO>>(result);
 

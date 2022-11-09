@@ -10,9 +10,9 @@ namespace ShareModel.DTO
     public class CategoryDTO
     {
 
-        public int Id { get; set; }       
-        public string? Name { get; set; }
-        public string? Href { get; set; }
+ 
+        public string Name { get; set; } = string.Empty;
+        public string? Description { get; set; }
 
      
 

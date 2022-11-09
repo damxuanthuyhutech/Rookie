@@ -1,23 +1,26 @@
 ﻿using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShareModel.DTO;
 using ShareModel.DTO.Product;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
+
     public class ProductController : ControllerBase
     {
         private readonly RookiesDbContext _context;
 
 
-        public IList<Product> Products { get; set; } = default!;
+        //public IList<Product> Products { get; set; } = default!;
 
 
 
@@ -46,7 +49,7 @@ namespace API.Controllers
                             {
                                 Price = x.Price,
                                 Description = x.Description,
-                                Category = x.Category.Name ?? "",                            
+                                Category = x.Category.Name ?? "",
                                 Author = x.Author,
                                 //Discount = x.Discount,
                                 Id = x.Id,
@@ -55,11 +58,41 @@ namespace API.Controllers
 
                             })
                             .ToListAsync();
-            //return await _context.Products!
-            //            .Include(x => x.Category)
-            //            .Include(x => x.Ratings)
-            //            .Select(x => ProductDTO(x))
-            //            .ToListAsync();
+         
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> Search([FromQuery]SearchProductDto input)
+        {
+            var query = _context.Products!
+                            .Include(x => x.Category)
+                            .Include(x => x.Ratings)
+                            .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(input.Category))
+            {
+                query = query.Where(e => e.Category.Name == input.Category);
+            }
+            if (!string.IsNullOrWhiteSpace(input.Search))
+            {
+                query = query.Where(e => e.Name == input.Search);
+            }
+
+            return await query.Skip(input.Skip.Value).Take(input.MaxResponse.Value)
+                .Select(x => new ProductDTO()
+                {
+                    Price = x.Price,
+                    Description = x.Description,
+                    Category = x.Category.Name ?? "",
+                    Author = x.Author,
+                    //Discount = x.Discount,
+                    Id = x.Id,
+                    Quantity = x.Quantity,
+                    Name = x.Name
+
+                }).ToListAsync();
+
         }
 
 
@@ -83,41 +116,35 @@ namespace API.Controllers
 
 
 
-        //[HttpPost]
-        ////[Authorize]
-        //public IActionResult CreateNew(ProductCreateDto productDTO)
-        //{
-        //    try
-        //    {
-        //        var product = new Product
-        //        {
-        //            AverageRating = productDTO.AverageRating,
-        //            CreatedDate = productDTO.CreatedDate,
-        //            Desciption = productDTO.Desciption,
-        //            Discount = productDTO.Discount,
-        //            MetaTitle = productDTO.MetaTitle,
-        //            NumberRating = productDTO.NumberRating,
-        //            NumberSold = productDTO.NumberSold,
-        //            Price = productDTO.Price,
-        //            Quantity = productDTO.Quantity,
-        //            Title = productDTO.Title,
-        //            UpdatedDate = productDTO.UpdatedDate,
-        //            Content = productDTO.Content,
-        //            Detail = productDTO.Detail,
-        //            Active = productDTO.Active,
-
-        //        };
-        //        _context.Products.Add(product);
-        //        _context.SaveChanges();
-        //        return Ok(product);
-        //    }
-        //    catch
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpPost]
+        public IActionResult CreateNew(ProductCreateDto productDTO)
+        {
+            try
+            {
+                var product = new Product
+                {
+                    Name = productDTO.Name,
+                    Description = productDTO.Description,
+                    Image = productDTO.Image,
+                    Author = productDTO.Author,
+                    Price = productDTO.Price,
+                    Quantity = productDTO.Quantity,
+                    CreatedDate = productDTO.CreatedDate,
+                    UpdatedDate = productDTO.UpdatedDate,
 
 
-        //}
+                };
+                _context.Products.Add(product);
+                _context.SaveChanges();
+                return Ok(product);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+
+        }
 
         //[HttpPut("{id}")]
         //public IActionResult Update(int id, ProductDTO model)
@@ -152,32 +179,94 @@ namespace API.Controllers
 
         //}
 
-        [HttpDelete("{id}")]
-    public IActionResult Delete(int Id)
-    {
-        var pro = _context.Products.SingleOrDefault(l => l.Id == Id);
-        if (pro != null)
-        {
+        //[HttpDelete("{id}")]
+        //public IActionResult Delete(int Id)
+        //{
+        //    var pro = _context.Products.SingleOrDefault(l => l.Id == Id);
+        //    if (pro != null)
+        //    {
 
-            _context.Remove(pro);
-            _context.SaveChanges();
+        //        _context.Remove(pro);
+        //        _context.SaveChanges();
 
-            return Ok();
-        }
-        else
-        {
-            return NotFound();
-        }
-    }
+        //        return Ok();
+        //    }
+        //    else
+        //    {
+        //        return NotFound();
+        //    }
+
+
+        //}
         //-------------------------------------------------------
+        [HttpPut("{id}")]
+        //[HttpGet("[action]/{id}")]
+        public async Task<ActionResult<ProductDTO>> Update(int id, ProductDTO productDTO)
+        {
+            var product = await _context.Products!
+                                    .Include(x => x.Category)
+                                    .Include(x => x.Ratings)
+                                    .FirstOrDefaultAsync(product => product.Id == id);
+            try
+            {
+                if (product != null)
+                {
+                    product.Name = productDTO.Name;
+                    product.Description = productDTO.Description;
+                    product.Image = productDTO.Image;
+                    product.Author = productDTO.Author;
+                    product.Price = productDTO.Price;
+                    product.Quantity = productDTO.Quantity;
+                    product.CreatedDate = productDTO.CreatedDate;
+                    product.UpdatedDate = productDTO.UpdatedDate;
 
-        [HttpGet("{id}")] 
+                    _context.SaveChanges();
+                    return Ok();
+
+
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch 
+            {
+                return BadRequest();
+            }
+           
+        }
+
+
+        [HttpDelete("{id}")]
+        //[HttpGet("[action]/{id}")]
+        public async Task<ActionResult<ProductDTO>> Delete(int id)
+        {
+            var product = await _context.Products!
+                                    .Include(x => x.Category)
+                                    .Include(x => x.Ratings)
+                                    .FirstOrDefaultAsync(product => product.Id == id);
+            if (product != null)
+            {
+
+                _context.Remove(product);
+                _context.SaveChanges();
+
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("{id}")]
         //[HttpGet("[action]/{id}")]
         public async Task<ActionResult<ProductDTO>> GetProductById(int id)
         {
             var product = await _context.Products!
                                     .Include(x => x.Category)
-                                    .Include(x => x.Ratings)                                    
+                                    .Include(x => x.Ratings)
                                     .FirstOrDefaultAsync(product => product.Id == id);
 
             if (product == null)
@@ -216,5 +305,5 @@ namespace API.Controllers
             };
         }
 
-    }   
+    }
 }

@@ -10,6 +10,6 @@ public class RatingDTO
     //public string Reviewer { get; set; } = string.Empty;
     [DataType(DataType.Date)]
     public DateTime UpdatedDate { get; set; }
-    public string Reviewer { get; set; }
+    public string Reviewer { get; set; } = string.Empty;
 
 }
