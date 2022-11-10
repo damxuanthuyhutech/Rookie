@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace API.Entities;
@@ -10,4 +11,8 @@ public class Category
     public string? Description { get; set; }
     public ICollection<Product>? Products { get; set; }
 
+    public static explicit operator JsonResult(Category? v)
+    {
+        throw new NotImplementedException();
+    }
 }

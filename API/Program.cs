@@ -28,7 +28,8 @@ namespace API
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   policy =>
                                   {
-                                      policy.WithOrigins("http://localhost:3000");
+                                      policy.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
+                                      //policy.WithOrigins("http://localhost:3000");
                                   });
             });
 

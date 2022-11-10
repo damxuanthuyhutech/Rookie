@@ -23,21 +23,23 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult getAll()
+        public async Task<List<Category>> getAll()
         {
 
-            var pro = _context.Categories.ToList();
-            return Ok(pro);
+            //var categories = await _context.Categories.ToListAsync();
+            //return Ok(categories);
+
+            return await _context.Categories.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public IActionResult getById(int id)
+        public async Task<ActionResult<CategoryDTO>> getById(int id)
         {
 
-            var loai = _context.Categories.Where(l => l.Id == id).ToList(); ;
-            if (loai != null)
+            var category = await _context.Categories.Where(l => l.Id == id).FirstOrDefaultAsync() ;
+            if (category != null)
             {
-                return Ok(loai);
+                return  Ok(category);
             }
             else
             {
@@ -50,7 +52,7 @@ namespace API.Controllers
      
 
         [HttpPost]
-        public IActionResult CreateNewCategories(CategoryCreateDto productDTO)
+        public async Task<ActionResult<Category>> CreateNewCategories(CategoryCreateDto productDTO)
         {
             try
             {
@@ -62,8 +64,8 @@ namespace API.Controllers
 
 
                 };
-                _context.Categories.Add(category);
-                _context.SaveChanges();
+                _context.Categories?.Add(category);
+                await _context.SaveChangesAsync();
                 return Ok(category);
             }
             catch

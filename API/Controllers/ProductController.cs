@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShareModel.DTO;
 using ShareModel.DTO.Product;
+using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -237,9 +238,50 @@ namespace API.Controllers
            
         }
 
+        [HttpGet("[action]/{CurrentPage}")]
+        //[Route("get-paging-products")]
+        public async Task<ActionResult<ProductDTO>> Paging(int CurrentPage)
+        {
+            int SizePage = 9;
+            var product = await _context.Products!
+                  .Include(x => x.Category)
+                            .Include(x => x.Ratings)                     
+                            .Select(x => new ProductDTO()
+                            {
+                                Price = x.Price,
+                                Description = x.Description,
+                                Category = x.Category.Name ?? "",
+                                Author = x.Author,
+                                //Discount = x.Discount,
+                                Id = x.Id,
+                                Quantity = x.Quantity,
+                                Name = x.Name
+
+                            })
+                            .Skip((CurrentPage - 1) * SizePage).Take(9).ToListAsync();
+            try
+            {
+                if (product != null)
+                {
+
+                    return Ok(product);
+
+
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
 
         [HttpDelete("{id}")]
-        //[HttpGet("[action]/{id}")]
+        
         public async Task<ActionResult<ProductDTO>> Delete(int id)
         {
             var product = await _context.Products!

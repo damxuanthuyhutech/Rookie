@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using ShareModel.DTO;
 using ShareModel.DTO.Product;
+using System.Drawing.Printing;
 using System.Text.Json;
 using System.Web;
 
@@ -12,7 +13,7 @@ namespace CustomersSite.Pages
 {
     
 
-    public class ShowProduct1Model : PageModel
+    public class ShowProductModel : PageModel
     {
         private APIHelper _api = new APIHelper();
 
@@ -25,34 +26,22 @@ namespace CustomersSite.Pages
         [BindProperty(SupportsGet = true)]
         public string? SelectedCategory { get; set; }
 
-        public int CurrentPage { get; set; } = 1;
-        public int TotalPages { get; set; } = 10;
 
-        public async Task OnGetAsync()
+        public int TotalPages { get; set; } = 20;
+        public int CurrentPage { get; set; } = 1;
+
+
+        public async Task OnGetAsync(int CurrentPage)
         {
-            //SearchProductDto input = new SearchProductDto();
-            //input.Search = SearchString;
-            //input.Category = SelectedCategory;
 
             HttpClient client = _api.initial();
-            var response = await client.GetAsync("api/Product/get-all-products");
-
-            //var url = HttpUtility.ParseQueryString(string.Empty);
-            //if (!string.IsNullOrWhiteSpace(input.Search))
-            //{
-            //    url["search"] = input.Search;
-            //}
-            //if (!string.IsNullOrWhiteSpace(input.Category))
-            //{
-            //    url["category"] = input.Category;
-            //}
-            //url["page"] = input.Page.Value.ToString();
-            //url["maxResponse"] = input.MaxResponse.Value.ToString();
-            //url["skip"] = input.Skip.Value.ToString();
-
-            //var abc = await client.GetAsync("api/Product/search?" + url.ToString());
-            //var abc = client.GetAsync("api/Product/search?" + url.ToString());
-            var result = response.Content.ReadAsStringAsync().Result;
+            if (CurrentPage == 0)
+            {
+                CurrentPage = 1;
+            }
+            this.CurrentPage = CurrentPage;
+            var response = await client.GetAsync($"api/Product/Paging/{CurrentPage}");
+            var result = response.Content.ReadAsStringAsync().Result;         
             Products = JsonConvert.DeserializeObject<List<ProductDTO>>(result);
 
             var response1 = await client.GetAsync("api/Category");
@@ -74,7 +63,6 @@ namespace CustomersSite.Pages
                 Products = Products!.Where(x => x.Category == SelectedCategory).ToList(); // ID have index query
           
             }
-            
 
             OptionCategories = new SelectList(Categories?.Select(x => x.Name));
 
