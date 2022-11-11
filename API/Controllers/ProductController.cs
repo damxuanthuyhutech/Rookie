@@ -331,7 +331,7 @@ namespace API.Controllers
         {
             var numberOfRating = product.Ratings.Count;
             var avgRating = numberOfRating > 0 ? Convert.ToDecimal(product.Ratings.Aggregate(0, (sum, rating) => sum + rating.Star)) / numberOfRating : 0;
-            return new ProductDTO
+            ProductDTO dto =  new ProductDTO()
             {
                 Id = product.Id,
                 Name = product.Name,
@@ -342,9 +342,10 @@ namespace API.Controllers
                 Quantity = product.Quantity,
                 CreatedDate = product.CreatedDate,
                 UpdatedDate = product.UpdatedDate,
-                Category = product.Category!.Name,
+                Category = product.Category?.Name ,
                 AverageRating = avgRating
             };
+            return dto;
         }
 
     }

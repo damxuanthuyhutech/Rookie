@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomersSite", "CustomersS
 		{40CCFF7F-F0CF-4A9E-9994-1F4944E11B57} = {40CCFF7F-F0CF-4A9E-9994-1F4944E11B57}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{796829E4-886C-43A5-8B90-C9210F785509}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTest.csproj", "{796829E4-886C-43A5-8B90-C9210F785509}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

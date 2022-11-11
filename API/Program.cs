@@ -11,10 +11,14 @@ namespace API
             var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            //status 500
+            builder.Services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            
 
             //////Cus
             /////1Chap nhan moi dia chi ip (public)
