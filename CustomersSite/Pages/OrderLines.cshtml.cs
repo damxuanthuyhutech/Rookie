@@ -11,32 +11,32 @@ namespace CustomersSite.Pages
     public class OrderLinesModel : PageModel
     {
         private APIHelper _api = new APIHelper();
-        public OrderLinesFormDTO orderLinesFormDTO { get; set; } = default!;
+        public OrderLinesFormDTO orderLinesFormDTO { get; set; } = new OrderLinesFormDTO();
 
         public IList<OrderLinesDTO>? OrderLines { get; set; }
-        
-        public async Task OnGetAsync(int id)
+
+        public async Task OnGetAsync(/*int id*/)
         {
             HttpClient client = _api.initial();
             string userId = Request.Cookies["Id"]!;
-            id = Int32.Parse(userId);
+            int id = Int32.Parse(userId);
             var response = await client.GetAsync($"api/OrderLines/{id}");
             var result = response.Content.ReadAsStringAsync().Result;
             OrderLines = JsonConvert.DeserializeObject<List<OrderLinesDTO>>(result);
-         
+
         }
 
-        //public async Task<IActionResult> OnPostAsync(int id)
-        //{
-        //    var client = new HttpClient();
-        //    client.BaseAddress = new Uri("https://localhost:7182/");
-        //    orderLinesFormDTO.Product = id;
-        //    string userId = Request.Cookies["Id"]!;
-        //    orderLinesFormDTO.Order = Int32.Parse(userId);     
-        //    await client.PostAsJsonAsync("api/OrderLines/OrderLineForm", orderLinesFormDTO);      
-        //    return RedirectToPage($"showproduct1");
+        public async Task<IActionResult> OnGetAddToCartAsync(int id)
+        {
+            var client = new HttpClient();
+            client.BaseAddress = new Uri("https://localhost:7182/");
+            orderLinesFormDTO.Product = id;
+            string userId = Request.Cookies["Id"]!;
+            orderLinesFormDTO.Order = Int32.Parse(userId);
+            await client.PostAsJsonAsync("api/OrderLines/OrderLineForm", orderLinesFormDTO);
+            return RedirectToPage($"showproduct");
 
-        //    //return Page();
-        //}
+            //return Page();                                
+        }
     }
 }

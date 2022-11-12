@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using ShareModel.DTO;
+using ShareModel.DTO.OrderLines;
 using ShareModel.DTO.Product;
 using System.Drawing.Printing;
 using System.Text.Json;
@@ -30,6 +31,7 @@ namespace CustomersSite.Pages
         public int TotalPages { get; set; } = 20;
         public int CurrentPage { get; set; } = 1;
 
+       
 
         public async Task OnGetAsync(int CurrentPage)
         {
@@ -70,6 +72,19 @@ namespace CustomersSite.Pages
 
 
         }
+
+        //public async Task<IActionResult> OnGetAddToCartAsync(int id)
+        //{
+        //    var client = new HttpClient();
+        //    client.BaseAddress = new Uri("https://localhost:7182/");
+        //    orderLinesFormDTO.Product = id;
+        //    string userId = Request.Cookies["Id"]!;
+        //    orderLinesFormDTO.Order = Int32.Parse(userId);
+        //    await client.PostAsJsonAsync("api/OrderLines/OrderLineForm", orderLinesFormDTO);
+        //    return RedirectToPage($"showproduct");
+
+        //    //return Page();
+        //}
     }
 
 }

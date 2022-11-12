@@ -14,6 +14,7 @@ namespace CustomersSite.Pages
         [BindProperty]
         public string Stars { get; set; } = "5";
         [BindProperty]
+        
         public ReviewProductFormDTO ReviewForm { get; set; } = default!;
         public List<RatingDTO> RatingList { get; set; } = new List<RatingDTO>();
         
