@@ -62,6 +62,15 @@ namespace API.Controllers
          
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult<int>> GetProductCount()
+        {
+            var products = await _context.Products!
+                                .ToListAsync();
+            return products.Count;
+
+        }
+
         [HttpGet]
         [Route("search")]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> Search([FromQuery]SearchProductDto input)

@@ -75,10 +75,13 @@
 
             <div class="col-lg-8 col-6 text-right" @*style=" margin-left: 150px*@">
 
-                <a href="OrderLines" class="btn"  >
+              
+                    <a href="OrderLines" class="btn"  >
                     <i class="fas fa-shopping-cart text-primary" ></i>
-                    <span border class="badge">1</span>
+                    <span border class="badge"></span>
                 </a>
+                
+                
             </div>
         </div>
     </div>
@@ -105,8 +108,11 @@
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu rounded-0 m-0">
-                                    <a href="cart.html" class="dropdown-item">Shopping Cart</a>
-                                    <a href="checkout.html" class="dropdown-item">Checkout</a>
+                                   
+                                        <a href="OrderLines" class="dropdown-item">Shopping Cart</a>
+                                        <a href="checkout.html" class="dropdown-item">Checkout</a>
+                                    
+                                    
                                 </div>
                             </div>
                             <a href="Contact" class="nav-item nav-link">Contact</a>
@@ -290,7 +296,6 @@
     }
     const logOut = () => {
         delete_cookie("access_token")
-
         location.reload()
         return false
     }

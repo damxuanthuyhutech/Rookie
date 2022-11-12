@@ -123,7 +123,7 @@
                                                 <div class="card-footer d-flex justify-content-between bg-light border">
                                                        <a asp-page="ShowDetail" class="btn btn-sm text-dark p-0" asp-route-id="@product.Id"><i
                                                         class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                                                                       <a class="btn btn-sm text-dark p-0" asp-page="OrderLines" asp-page-handler="AddToCart"  asp-route-id=@product.Id><i
+                                                        <a class="btn btn-sm text-dark p-0" asp-page="OrderLines" asp-page-handler="AddToCart"  asp-route-id=@product.Id><i
                                                         class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
                                                 </div>
                                             </div>
@@ -133,7 +133,7 @@
                     }
 
                     <!-- paging Product Start -->
-                    <div style="text-align" >
+                    <div class="col-12 d-flex justi">
                         <ul class="pagination">
                             @for (var i = 1; i <= Model.TotalPages; i++)
                             {
@@ -147,7 +147,7 @@
                     <!-- paging Product end -->               
                     
                     
-                @*</div>*@
+                </div>
             </div>
             <!-- Shop Product End -->
         </div>

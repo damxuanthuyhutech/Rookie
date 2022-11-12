@@ -30,7 +30,7 @@ namespace API.Controllers
 
 
         [HttpGet("{id}")]
-        //[Route("get-all-OrderLines")]
+     
         public async Task<ActionResult<IEnumerable<OrderLinesDTO>>> GetAllOrderLines(int id)
         {
             return  await _context.OrderLines!
@@ -69,54 +69,172 @@ namespace API.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> CreateNewAsync(OrderLinesCreateDTO orderLinesDTO)
-        {
-            try
-            {
-                var order = await _context.Orders?.FirstOrDefaultAsync(o => o.Id == orderLinesDTO.Order);
-                var product = await _context.Products?.FirstOrDefaultAsync(o => o.Id == orderLinesDTO.Product);
+        //[HttpPost]
+        //public async Task<IActionResult> CreateNewAsync(OrderLinesCreateDTO orderLinesDTO)
+        //{
+        //    try
+        //    {
+        //        var order = await _context.Orders?.FirstOrDefaultAsync(o => o.Id == orderLinesDTO.Order);
+        //        var product = await _context.Products?.FirstOrDefaultAsync(o => o.Id == orderLinesDTO.Product);
 
-                var orderLines = new OrderLine
-                {
+        //        var alreadyUserId = await _context.OrderLines?.FirstOrDefaultAsync(t => t.Product == product);
+        //        var alreadyProductId = await _context.OrderLines?.FirstOrDefaultAsync(t => t.Order == order);
 
-                    Quantity = orderLinesDTO.Quantity,
-                    Order = order,
-                    Product = product,
-                };
-                await _context.OrderLines.AddAsync(orderLines);
-                await _context.SaveChangesAsync();
-                return Ok(orderLines);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+        //        OrderLine orderLines;
+        //        if (alreadyUserId == null && alreadyProductId == null)
+        //        {
+        //            orderLines = new OrderLine
+        //            {
+
+        //                Quantity = orderLinesDTO.Quantity,
+        //                Order = order,
+        //                Product = product,
+        //            };
+        //            await _context.OrderLines.AddAsync(orderLines);
+        //            await _context.SaveChangesAsync();
+        //            return Ok(orderLines);
+
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("ngu");
+        //        }
+
+        //        return Ok(orderLinesDTO);
+               
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
 
 
-        }
+        //}
 
         [HttpPost("[action]")]
-        public async Task<ActionResult<OrderLine>> OrderLineForm(OrderLinesFormDTO orderLinesFormDTO)
+        public async Task<ActionResult> OrderLineForm(OrderLinesFormDTO orderLinesFormDTO)
         {
-            var product = await _context.Products!.FindAsync(orderLinesFormDTO.Product);
-            //var user = await _context.Users!.FindAsync(orderLinesFormDTO.Order);
-            var order = await _context.Orders?.FirstOrDefaultAsync(o => o.Id == orderLinesFormDTO.Order);
+            var alreadyUserId = await _context.OrderLines!
+                .Include(c => c.Product)
+                .Include(c => c.Order)
+                .FirstOrDefaultAsync(t => t.Product.Id == orderLinesFormDTO.Product && t.Order.Id == orderLinesFormDTO.Order);
 
-            if (order == null || product == null)
-                return BadRequest();
-            var orderLine = new OrderLine
+            //var alreadyProductId = await _context.OrderLines?.FirstOrDefaultAsync(t => t.Order == order);
+            if (alreadyUserId != null)
+            {           
+                alreadyUserId.Quantity += orderLinesFormDTO.Quantity;
+                _context.SaveChanges();
+                return Ok();
+            } 
+            else
             {
-                Quantity = orderLinesFormDTO.Quantity,
-                Order = order,
-                Product = product,
-                
+                var product = await _context.Products!.FindAsync(orderLinesFormDTO.Product);
+                var order = await _context.Orders!.FindAsync(orderLinesFormDTO.Order);
 
-            };
-            _context.OrderLines!.Add(orderLine);
-            await _context.SaveChangesAsync();
+                if (product == null || order == null)
+                {
+                    return BadRequest();
+                }
 
-            return Ok();
+                var orderLine = new OrderLine
+                {
+                    Quantity = orderLinesFormDTO.Quantity,
+                    Order = order,
+                    Product = product
+                };
+                _context.OrderLines!.Add(orderLine);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+    
         }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult<OrderLinesDTO>> AddQuantity(int id)
+        {
+
+            var orderLines = await _context.OrderLines!.Where(l => l.Id == id).FirstOrDefaultAsync();
+            if (orderLines != null)
+            {
+                orderLines.Quantity = orderLines.Quantity + 1;
+                _context.SaveChanges();
+                return Ok(orderLines);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult<OrderLinesDTO>> TruQuantity(int id)
+        {
+
+            var orderLines = await _context.OrderLines!.Where(l => l.Id == id).FirstOrDefaultAsync();
+            if (orderLines != null)
+            {
+                orderLines.Quantity = orderLines.Quantity - 1;
+                if (orderLines.Quantity == 0)
+                {
+                    _context.Remove(orderLines);
+                    _context.SaveChanges();
+
+                    return Ok();
+                }
+                _context.SaveChanges();
+                return Ok(orderLines);
+            }
+            else
+            {
+                return NotFound();
+            }
+
+
+        }
+
+        [HttpGet("[action]/{id}")]
+        public async Task<ActionResult<OrderLinesDTO>> Delete(int id)
+        {
+            var orderLines = await _context.OrderLines!
+                                    .Include(x => x.Product)
+                                    .Include(x => x.Order)
+                                    .FirstOrDefaultAsync(c => c.Id == id);
+            if (orderLines != null)
+            {
+
+                _context.Remove(orderLines);
+                _context.SaveChanges();
+
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult<OrderLinesDTO>> GetAllOrther()
+        {
+            var prop =  await _context.OrderLines!
+                           .Include(x => x.Product)
+                           .Include(x => x.Order)                        
+                           .Select(x => new OrderLinesDTO()
+                           {
+                               Id = x.Id,
+                               Quantity = x.Quantity,
+                               Order = x.Order.User.Id,
+                               Product = x.Product.Name,
+
+                           })
+                           .ToListAsync();
+
+            return Ok(prop);
+
+        }
+
     }
 }

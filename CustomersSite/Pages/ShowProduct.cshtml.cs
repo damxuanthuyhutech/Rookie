@@ -27,7 +27,6 @@ namespace CustomersSite.Pages
         [BindProperty(SupportsGet = true)]
         public string? SelectedCategory { get; set; }
 
-
         public int TotalPages { get; set; } = 20;
         public int CurrentPage { get; set; } = 1;
 
@@ -68,23 +67,13 @@ namespace CustomersSite.Pages
 
             OptionCategories = new SelectList(Categories?.Select(x => x.Name));
 
-
-
-
+            
+            response = await client.GetAsync("api/Product/GetProductCount");
+            result = response.Content.ReadAsStringAsync().Result;
+            TotalPages = Convert.ToInt32(Math.Ceiling(decimal.Parse(result) / 9));
         }
 
-        //public async Task<IActionResult> OnGetAddToCartAsync(int id)
-        //{
-        //    var client = new HttpClient();
-        //    client.BaseAddress = new Uri("https://localhost:7182/");
-        //    orderLinesFormDTO.Product = id;
-        //    string userId = Request.Cookies["Id"]!;
-        //    orderLinesFormDTO.Order = Int32.Parse(userId);
-        //    await client.PostAsJsonAsync("api/OrderLines/OrderLineForm", orderLinesFormDTO);
-        //    return RedirectToPage($"showproduct");
-
-        //    //return Page();
-        //}
+      
     }
 
 }
