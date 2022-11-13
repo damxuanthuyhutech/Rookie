@@ -15,6 +15,8 @@ namespace CustomersSite.Pages
 
         public IList<OrderLinesDTO>? OrderLines { get; set; }
 
+        public int Subtotal { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             string token = Request.Cookies["access_token"] ?? "";
@@ -26,6 +28,11 @@ namespace CustomersSite.Pages
                 var response = await client.GetAsync($"api/OrderLines/{id}");
                 var result = response.Content.ReadAsStringAsync().Result;
                 OrderLines = JsonConvert.DeserializeObject<List<OrderLinesDTO>>(result);
+
+                
+
+
+
                 return Page();
             }
             return RedirectToPage($"Login");

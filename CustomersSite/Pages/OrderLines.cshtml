@@ -34,27 +34,31 @@
                      
                             foreach(var OrderLines in Model.OrderLines)
                             {
-                                    <tr>
-                                        <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;"> @OrderLines.Product</td>
-                                        <td class="align-middle">$@OrderLines.PriceProduct</td>
-                                        <td class="align-middle">
-                                            <div class="input-group quantity mx-auto" style="width: 100px;">
-                                                <div class="input-group-btn">
-                                                   <a class="btn btn-sm btn-primary btn-minus"  asp-page="OrderLines" asp-page-handler="TruTo"  asp-route-idTru="@OrderLines.Id">
-                                                                                   <i class="fa fa-minus"></i>
-                                                    </a>
-                                                </div>
-                                                <input type="text" class="form-control form-control-sm bg-secondary text-center" value="@OrderLines.Quantity">
-                                                <div class="input-group-btn">
-                                                    <a class="btn btn-sm btn-primary btn-plus" asp-page="OrderLines" asp-page-handler="AddTo"  asp-route-idAdd=@OrderLines.Id>
-                                                        <i class="fa fa-plus"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="align-middle">$150</td>
-                                                <td class="align-middle"><a class="btn btn-sm btn-primary" asp-page="OrderLines" asp-page-handler="RemoveAll"  asp-route-idRemove="@OrderLines.Id" ><i class="fa fa-times" ></i></a></td>
-                                    </tr>
+                                            <tr>
+                                                <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;"> @OrderLines.Product</td>
+                                                <td class="align-middle">$@OrderLines.PriceProduct</td>
+                                                <td class="align-middle">
+                                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                                        <div class="input-group-btn">
+                                                           <a class="btn btn-sm btn-primary btn-minus"  asp-page="OrderLines" asp-page-handler="TruTo"  asp-route-idTru="@OrderLines.Id">
+                                                                                           <i class="fa fa-minus"></i>
+                                                            </a>
+                                                        </div>
+                                                        <input type="text" class="form-control form-control-sm bg-secondary text-center" value="@OrderLines.Quantity">
+                                                        <div class="input-group-btn">
+                                                            <a class="btn btn-sm btn-primary btn-plus" asp-page="OrderLines" asp-page-handler="AddTo"  asp-route-idAdd=@OrderLines.Id>
+                                                                <i class="fa fa-plus"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                @{
+                                    double total = (@OrderLines.Quantity) * (@OrderLines.PriceProduct);
+                                }
+
+                                                        <td class="align-middle">$@total</td>
+                                                        <td class="align-middle"><a class="btn btn-sm btn-primary" asp-page="OrderLines" asp-page-handler="RemoveAll"  asp-route-idRemove="@OrderLines.Id" ><i class="fa fa-times" ></i></a></td>
+                                            </tr>
 
 
                             }
@@ -86,11 +90,11 @@
                             <h6 class="font-weight-medium">Shipping</h6>
                             <h6 class="font-weight-medium">$10</h6>
                         </div>
-                    </div>
+                    </div>         
                     <div class="card-footer border-secondary bg-transparent">
                         <div class="d-flex justify-content-between mt-2">
                             <h5 class="font-weight-bold">Total</h5>
-                            <h5 class="font-weight-bold">$160</h5>
+                            <h5 class="font-weight-bold">totlas</h5>
                         </div>
                         <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
                     </div>
@@ -99,4 +103,17 @@
         </div>
     </div>
     <!-- Cart End -->
+@*@{
+    double Total = 1;
+    double Total1 = 1;
+
+    foreach (var OrderLines in Model.OrderLines)
+    {
+        Total = @OrderLines.Quantity * @OrderLines.PriceProduct;
+    }
+
+
+    Total1 = @Model.OrderLines.Count * Total;
+
+}*@
 

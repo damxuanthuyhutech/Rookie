@@ -68,12 +68,12 @@ namespace API.Controllers
             var products = await _context.Products!
                                 .ToListAsync();
             return products.Count;
-
+              
         }
 
         [HttpGet]
         [Route("search")]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> Search([FromQuery]SearchProductDto input)
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> Search([FromQuery] SearchProductDto input)
         {
             var query = _context.Products!
                             .Include(x => x.Category)
@@ -251,7 +251,7 @@ namespace API.Controllers
         //[Route("get-paging-products")]
         public async Task<ActionResult<ProductDTO>> Paging(int CurrentPage)
         {
-            int SizePage = 9;
+            int SizePage = 9;                  
             var product = await _context.Products!
                   .Include(x => x.Category)
                             .Include(x => x.Ratings)                     
@@ -261,7 +261,7 @@ namespace API.Controllers
                                 Description = x.Description,
                                 Category = x.Category.Name ?? "",
                                 Author = x.Author,
-                                //Discount = x.Discount,
+                                Image = x.Image,
                                 Id = x.Id,
                                 Quantity = x.Quantity,
                                 Name = x.Name

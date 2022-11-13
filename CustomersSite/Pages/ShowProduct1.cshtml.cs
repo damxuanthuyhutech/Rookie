@@ -19,14 +19,17 @@ namespace CustomersSite.Pages
         public IList<ProductDTO>? Products { get; set; }
         public IList<CategoryDTO>? Categories { get; set; }
 
+        //[BindProperty]
+        public SearchProductDto searchProductDto { get; set; } = new SearchProductDto();
+       
         [BindProperty(SupportsGet = true)]
         public string? SearchString { get; set; }
         public SelectList? OptionCategories { get; set; }
         [BindProperty(SupportsGet = true)]
         public string? SelectedCategory { get; set; }
 
+        public int TotalPages { get; set; } = 20;
         public int CurrentPage { get; set; } = 1;
-        public int TotalPages { get; set; } = 10;
 
         public async Task OnGetAsync()
         {
@@ -35,7 +38,20 @@ namespace CustomersSite.Pages
             //input.Category = SelectedCategory;
 
             HttpClient client = _api.initial();
-            var response = await client.GetAsync("api/Product/get-all-products");
+            if (CurrentPage == 0)
+            {
+                CurrentPage = 1;
+            }
+            searchProductDto.CurrentPage = CurrentPage;
+            searchProductDto.SelectedCategory = SelectedCategory;
+            searchProductDto.SearchString = SearchString;
+
+
+
+            var repon = await client.PostAsJsonAsync($"api/Product/search", searchProductDto);
+            var result = repon.Content.ReadAsStringAsync().Result;
+            var Product = JsonConvert.DeserializeObject<List<CategoryDTO>>(result);
+
 
             //var url = HttpUtility.ParseQueryString(string.Empty);
             //if (!string.IsNullOrWhiteSpace(input.Search))
@@ -52,28 +68,28 @@ namespace CustomersSite.Pages
 
             //var abc = await client.GetAsync("api/Product/search?" + url.ToString());
             //var abc = client.GetAsync("api/Product/search?" + url.ToString());
-            var result = response.Content.ReadAsStringAsync().Result;
-            Products = JsonConvert.DeserializeObject<List<ProductDTO>>(result);
+
+
 
             var response1 = await client.GetAsync("api/Category");
             var result1 = response1.Content.ReadAsStringAsync().Result;
             Categories = JsonConvert.DeserializeObject<List<CategoryDTO>>(result1);
 
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                {
-                    Products = Products!.Where(s => s.Name.ToLower().Contains(SearchString.ToLower())).ToList();
-                }
+            //if (!string.IsNullOrEmpty(SearchString))
+            //{
+            //    {
+            //        Products = Products!.Where(s => s.Name.ToLower().Contains(SearchString.ToLower())).ToList();
+            //    }
 
-            }
+            //}
 
-            if (!string.IsNullOrEmpty(SelectedCategory))
-            {
-                //Products = from s in Products where (s.Category == SelectedCategory;
-                //Products = Products!.Where(s => s.ProductId == SelectedCategory).ToList();
-                Products = Products!.Where(x => x.Category == SelectedCategory).ToList(); // ID have index query
+            //if (!string.IsNullOrEmpty(SelectedCategory))
+            //{
+            //    //Products = from s in Products where (s.Category == SelectedCategory;
+            //    //Products = Products!.Where(s => s.ProductId == SelectedCategory).ToList();
+            //    Products = Products!.Where(x => x.Category == SelectedCategory).ToList(); // ID have index query
           
-            }
+            //}
             
 
             OptionCategories = new SelectList(Categories?.Select(x => x.Name));
