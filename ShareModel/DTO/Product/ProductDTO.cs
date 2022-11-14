@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShareModel.DTO
+namespace ShareModel.DTO.Product
 {
     public class ProductDTO
     {
@@ -20,8 +20,8 @@ namespace ShareModel.DTO
         public string? Image { get; set; }
 
         public string? Author { get; set; } = string.Empty;
-        
-        public decimal? AverageRating { get; set; } 
+
+        public decimal? AverageRating { get; set; }
 
         //[Column(TypeName = "decimal(18, 2)")]
         public double Price { get; set; }

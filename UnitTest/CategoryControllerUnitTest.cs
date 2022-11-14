@@ -58,7 +58,7 @@ namespace UnitTest
 
             var objResult = categoryController.getById(id).Result.Result as ObjectResult ;
 
-            Category? result = (Category?)objResult.Value;
+            Category? result = (Category?)objResult!.Value;
             
             Assert.NotNull(result);
             Assert.Equivalent(_categories.FirstOrDefault(c => c.Id == id), result);
@@ -91,7 +91,7 @@ namespace UnitTest
             var result = categoryController.Delete(id).Result;
             Assert.NotNull(result);
             Assert.IsType<OkResult>(result);
-            Assert.Null(_context.Categories.FirstOrDefault(c => c.Id == id));
+            Assert.Null(_context.Categories!.FirstOrDefault(c => c.Id == id));
 
         }
 

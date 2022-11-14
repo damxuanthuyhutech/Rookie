@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShareModel.DTO;
 using API.Data;
 using Microsoft.AspNetCore.Razor.Language.Extensions;
+using ShareModel.DTO.Rating;
 
 namespace API.Controllers
 {
@@ -24,7 +24,7 @@ namespace API.Controllers
         public IActionResult getAll()
         {
 
-            var pro = _context.Ratings.ToList();
+            var pro = _context.Ratings!.ToList();
             return Ok(pro);
         }
 

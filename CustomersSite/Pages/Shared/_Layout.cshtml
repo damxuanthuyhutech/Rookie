@@ -295,6 +295,10 @@
     }
     const logOut = () => {
         delete_cookie("access_token")
+        delete_cookie("Id")
+        delete_cookie("name")
+        //delete_cookie(".AspNetCore.Antiforgery.6_v5Wx5FWe4")
+        //delete_cookie(".AspNetCore.Antiforgery.V5xRoiv8DEY")
         location.reload()
         return false
     }

@@ -8,9 +8,9 @@ using System.Security.Claims;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using SharedViewModels;
 using API.Data;
 using API.Entities;
+using ShareModel.DTO.Login;
 
 namespace API.Controllers;
 

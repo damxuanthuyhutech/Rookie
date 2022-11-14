@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using ShareModel.DTO;
+using ShareModel.DTO.Category;
 using ShareModel.DTO.OrderLines;
 using ShareModel.DTO.Product;
 using System.Drawing.Printing;
@@ -12,7 +12,7 @@ using System.Web;
 
 namespace CustomersSite.Pages
 {
-    
+
 
     public class ShowProductModel : PageModel
     {
@@ -28,7 +28,7 @@ namespace CustomersSite.Pages
         public string? SelectedCategory { get; set; }
 
         public int TotalPages { get; set; } = 20;
-        public int CurrentPage { get; set; } = 1;
+        public int CurrentPage { get; set; }
 
        
 
@@ -50,17 +50,13 @@ namespace CustomersSite.Pages
             Categories = JsonConvert.DeserializeObject<List<CategoryDTO>>(result1);
 
             if (!string.IsNullOrEmpty(SearchString))
-            {
-                {
-                    Products = Products!.Where(s => s.Name.ToLower().Contains(SearchString.ToLower())).ToList();
-                }
-
+            {               
+                    Products = Products!.Where(s => s.Name.ToLower().Contains(SearchString.ToLower())).ToList();    
             }
 
             if (!string.IsNullOrEmpty(SelectedCategory))
             {
-                //Products = from s in Products where (s.Category == SelectedCategory;
-                //Products = Products!.Where(s => s.ProductId == SelectedCategory).ToList();
+                
                 Products = Products!.Where(x => x.Category == SelectedCategory).ToList(); // ID have index query
           
             }

@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using ShareModel.DTO;
+using ShareModel.DTO.Product;
 
 namespace CustomersSite.Controller
 {
@@ -19,7 +19,7 @@ namespace CustomersSite.Controller
             var result = response.Content.ReadAsStringAsync().Result;
             var products = JsonConvert.DeserializeObject<List<ProductDTO>>(result);
 
-            return products;
+            return products!;
         }
 
         public async Task<ProductDTO> GetAsync(int id)
@@ -28,7 +28,7 @@ namespace CustomersSite.Controller
             var result = response.Content.ReadAsStringAsync().Result;
             var product = JsonConvert.DeserializeObject<ProductDTO>(result);
 
-            return product;
+            return product!;
         }
     }
 }

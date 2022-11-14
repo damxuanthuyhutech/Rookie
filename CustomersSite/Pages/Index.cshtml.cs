@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using ShareModel.DTO;
 using CustomerSite.Helper;
+using ShareModel.DTO.Product;
 
 namespace CustomersSite.Pages
 {

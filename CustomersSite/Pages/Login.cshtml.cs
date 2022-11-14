@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
-using SharedViewModels;
+using ShareModel.DTO.Login;
 
 namespace CustomersSite.Pages
 {
@@ -54,13 +54,13 @@ namespace CustomersSite.Pages
 
 
 
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> OnLogout()
         {       
             Response.Cookies.Delete("access_token");
             Response.Cookies.Delete("Id");
             Response.Cookies.Delete("name");
             Response.Cookies.Delete(".AspNetCore.Antiforgery.V5xRoiv8DEY");
-            return RedirectToPage("index");
+            return  RedirectToPage("index");
         }
 
     }

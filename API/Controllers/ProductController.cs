@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ShareModel.DTO;
 using ShareModel.DTO.Product;
 using System.Drawing;
 using System.Linq;
@@ -34,7 +33,7 @@ namespace API.Controllers
         public IActionResult getAll()
         {
 
-            var pro = _context.Products.ToList();
+            var pro = _context.Products!.ToList();
             return Ok(pro);
         }
 
@@ -50,7 +49,7 @@ namespace API.Controllers
                             {
                                 Price = x.Price,
                                 Description = x.Description,
-                                Category = x.Category.Name ?? "",
+                                Category = x.Category!.Name ?? "",
                                 Author = x.Author,
                                 //Discount = x.Discount,
                                 Id = x.Id,
@@ -82,19 +81,19 @@ namespace API.Controllers
 
             if (!string.IsNullOrWhiteSpace(input.Category))
             {
-                query = query.Where(e => e.Category.Name == input.Category);
+                query = query.Where(e => e.Category!.Name == input.Category);
             }
             if (!string.IsNullOrWhiteSpace(input.Search))
             {
                 query = query.Where(e => e.Name == input.Search);
             }
 
-            return await query.Skip(input.Skip.Value).Take(input.MaxResponse.Value)
+            return await query.Skip(input.Skip!.Value).Take(input.MaxResponse!.Value)
                 .Select(x => new ProductDTO()
                 {
                     Price = x.Price,
                     Description = x.Description,
-                    Category = x.Category.Name ?? "",
+                    Category = x.Category!.Name ?? "",
                     Author = x.Author,
                     //Discount = x.Discount,
                     Id = x.Id,
@@ -144,7 +143,7 @@ namespace API.Controllers
 
 
                 };
-                _context.Products.Add(product);
+                _context.Products!.Add(product);
                 _context.SaveChanges();
                 return Ok(product);
             }
@@ -224,7 +223,7 @@ namespace API.Controllers
                     product.Name = productDTO.Name;
                     product.Description = productDTO.Description;
                     product.Image = productDTO.Image;
-                    product.Author = productDTO.Author;
+                    product.Author = productDTO.Author!;
                     product.Price = productDTO.Price;
                     product.Quantity = productDTO.Quantity;
                     product.CreatedDate = productDTO.CreatedDate;
@@ -259,7 +258,7 @@ namespace API.Controllers
                             {
                                 Price = x.Price,
                                 Description = x.Description,
-                                Category = x.Category.Name ?? "",
+                                Category = x.Category!.Name ?? "",
                                 Author = x.Author,
                                 Image = x.Image,
                                 Id = x.Id,

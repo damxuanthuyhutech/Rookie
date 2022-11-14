@@ -36,7 +36,7 @@ namespace API.Controllers
             return  await _context.OrderLines!
                                   .Include(x => x.Order)
                                   .Include(x => x.Product)
-                                  .Where(x => x.Order.Id == id)
+                                  .Where(x => x.Order.User.Id == id)
                                   .Select(x => new OrderLinesDTO()
                                   {
                                       Id = x.Id,
@@ -117,9 +117,9 @@ namespace API.Controllers
             var alreadyUserId = await _context.OrderLines!
                 .Include(c => c.Product)
                 .Include(c => c.Order)
-                .FirstOrDefaultAsync(t => t.Product.Id == orderLinesFormDTO.Product && t.Order.Id == orderLinesFormDTO.Order);
+                .FirstOrDefaultAsync(t => t.Product.Id == orderLinesFormDTO.ProductId && t.Order.Id == orderLinesFormDTO.OrderId);
 
-            //var alreadyProductId = await _context.OrderLines?.FirstOrDefaultAsync(t => t.Order == order);
+
             if (alreadyUserId != null)
             {           
                 alreadyUserId.Quantity += orderLinesFormDTO.Quantity;
@@ -128,18 +128,36 @@ namespace API.Controllers
             } 
             else
             {
-                var product = await _context.Products!.FindAsync(orderLinesFormDTO.Product);
-                var order = await _context.Orders!.FindAsync(orderLinesFormDTO.Order);
 
-                if (product == null || order == null)
+                
+                var UserId = await _context.Orders!.FirstOrDefaultAsync(u => u.User.Id == orderLinesFormDTO.OrderId);
+                if (UserId == null)
                 {
-                    return BadRequest();
+
+                    var User = await _context.Users!.FirstOrDefaultAsync(user => user.Id == orderLinesFormDTO.OrderId);
+                    var oder = new Order()
+                    {
+                        User = User!   
+                    };
+                   _context.Orders!.Add(oder);
+                    await _context.SaveChangesAsync();
+                }
+
+
+                var product = await _context.Products!.FindAsync(orderLinesFormDTO.ProductId);
+                var order = await _context.Orders!.FirstOrDefaultAsync(o => o.User.Id == orderLinesFormDTO.OrderId);
+
+             
+              
+                if (product == null /*|| order == null*/)
+                {
+                    return BadRequest("pronull");
                 }
 
                 var orderLine = new OrderLine
                 {
                     Quantity = orderLinesFormDTO.Quantity,
-                    Order = order,
+                    Order = order!,
                     Product = product
                 };
                 _context.OrderLines!.Add(orderLine);

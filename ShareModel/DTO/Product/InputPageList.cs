@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShareModel.DTO
+namespace ShareModel.DTO.Product
 {
     public class InputPageList
     {

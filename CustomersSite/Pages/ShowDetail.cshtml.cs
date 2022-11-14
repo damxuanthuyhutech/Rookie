@@ -2,7 +2,8 @@ using CustomersSite.Controller;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
-using ShareModel.DTO;
+using ShareModel.DTO.Product;
+using ShareModel.DTO.Rating;
 
 namespace CustomersSite.Pages
 {
@@ -51,7 +52,7 @@ namespace CustomersSite.Pages
             await client.PostAsJsonAsync("api/Rating", ReviewForm);
 
             //return RedirectToPage($"showdetaill/{id}");
-            return RedirectToPage($"showproduct1");
+            return RedirectToPage($"showproduct");
             
             //return Page();
         }

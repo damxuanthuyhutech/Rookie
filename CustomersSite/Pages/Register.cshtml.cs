@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using CustomerSite.Helper;
-using SharedViewModels;
+using ShareModel.DTO.Login;
 
 namespace CustomerSite.Pages;
 

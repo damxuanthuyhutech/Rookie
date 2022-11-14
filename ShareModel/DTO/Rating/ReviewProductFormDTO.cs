@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ShareModel.DTO;
+namespace ShareModel.DTO.Rating;
 
 public class ReviewProductFormDTO
 {

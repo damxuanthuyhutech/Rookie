@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SharedViewModels;
+namespace ShareModel.DTO.Login;
 
 public class LoginFormDTO
 {

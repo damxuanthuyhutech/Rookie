@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ShareModel.DTO;
+namespace ShareModel.DTO.Rating;
 
 public class RatingDTO
 {
@@ -11,5 +11,4 @@ public class RatingDTO
     [DataType(DataType.Date)]
     public DateTime UpdatedDate { get; set; }
     public string Reviewer { get; set; } = string.Empty;
-
 }

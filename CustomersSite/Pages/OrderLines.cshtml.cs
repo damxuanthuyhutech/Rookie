@@ -46,9 +46,9 @@ namespace CustomersSite.Pages
             {
                 var client = new HttpClient();
                 client.BaseAddress = new Uri("https://localhost:7182/");
-                orderLinesFormDTO.Product = id;
+                orderLinesFormDTO.ProductId = id;
                 string userId = Request.Cookies["Id"]!;
-                orderLinesFormDTO.Order = Int32.Parse(userId);
+                orderLinesFormDTO.OrderId = Int32.Parse(userId);
                 orderLinesFormDTO.Quantity = 1;
                 await client.PostAsJsonAsync("api/OrderLines/OrderLineForm", orderLinesFormDTO);
                 return RedirectToPage($"showproduct");

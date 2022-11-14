@@ -3,7 +3,6 @@ using API.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ShareModel.DTO;
 using ShareModel.DTO.Category;
 using ShareModel.DTO.Product;
 using System;
@@ -29,14 +28,14 @@ namespace API.Controllers
             //var categories = await _context.Categories.ToListAsync();
             //return Ok(categories);
 
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories!.ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryDTO>> getById(int id)
         {
 
-            var category = await _context.Categories.Where(l => l.Id == id).FirstOrDefaultAsync() ;
+            var category = await _context.Categories!.Where(l => l.Id == id).FirstOrDefaultAsync() ;
             if (category != null)
             {
                 return  Ok(category);
